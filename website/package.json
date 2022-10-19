@@ -1,0 +1,32 @@
+{
+  "name": "estaminet",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf .parcel-cache dist node_modules yarn.lock",
+    "dev": "parcel serve ./src/index.html",
+    "build": "mkdir -p dist && cp src/index.html dist && node esbuild.js",
+    "start": "yarn run build --watch && esbuild --servedir=dist"
+  },
+  "app": "dist/index.html",
+  "targets": {
+    "app": {}
+  },
+  "source": "src/index.tsx",
+  "browserslist": [
+    "last 2 versions"
+  ],
+  "dependencies": {
+    "@nextui-org/react": "1.0.0-beta.10",
+    "esbuild": "0.15.7",
+    "estaminet": "1.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-syntax-highlighter": "15.5.0"
+  },
+  "devDependencies": {
+    "@types/react-dom": "18.0.6",
+    "util": "0.12.4"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "estaminet",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": ["dist", "src"],
+  "scripts": {
+    "clean": "rm -rf dist node_modules yarn.lock",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@polkadot/api": "9.3.3",
+    "gerbeur": "1.0.4"
+  },
+  "devDependencies": {
+    "typescript": "4.8.4"
+  }
+}
