@@ -1,4 +1,4 @@
-A set of WebComponents building on top of Statemine family of parachains.
+A set of [WebComponents](https://www.webcomponents.org/) building on top of [Statemint](https://wiki.polkadot.network/docs/learn-statemint) family of [Polkadot](polkadot.network) [parachains](https://wiki.polkadot.network/docs/learn-parachains).
 
 # Getting Started
 

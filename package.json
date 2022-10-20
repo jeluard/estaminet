@@ -2,6 +2,16 @@
   "name": "estaminet",
   "version": "1.0.1",
   "license": "MIT",
+  "description": "A set of WebComponents building on top of Statemint family of Polkadot parachains",
+  "keywords": ["web-component", "polkadot", "web3", "nft", "pallets", "uniques"],
+  "bugs": {
+    "url": "https://github.com/estaminet/estaminet/issues"
+  },
+  "homepage": "https://github.com/estaminet/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/estaminet/estaminet.git"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
