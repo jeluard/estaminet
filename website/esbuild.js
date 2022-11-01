@@ -6,10 +6,10 @@ build({
   sourcemap: 'external',
   minify: true,
   bundle: true,
-  format: "esm",
+  format: 'esm',
   define: {
     'process.env.NODE_DEBUG': 'false',
-    'global': 'globalThis'
+    global: 'globalThis'
   }
 })
   .catch(() => process.exit(1))

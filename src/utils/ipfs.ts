@@ -1,9 +1,16 @@
-export function url(hash: string): string {
+export function url(data: string): string | undefined {
     // https://gateway.pinata.cloud/ipfs/
     // https://ipfs.pixura.io/ipfs/
-    return `https://gateway.pinata.cloud/ipfs/${hash}`;
+    const hash = extractHash(data);
+    if (hash) {
+        return `https://gateway.pinata.cloud/ipfs/${hash}`;
+    }
 }
 
-export function extractHash(uri: string): string | undefined {
-    return uri.split("/").at(-1);
+/**
+ * @param uri 
+ * @returns a IPFS hash from a data chunk (IPFS URI (e.g. ipfs://ipfs/Qm..), hash code)
+ */
+export function extractHash(data: string): string | undefined {
+    return data.split("/").at(-1);
 }

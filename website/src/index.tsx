@@ -2,7 +2,8 @@ import React from "react";
 import * as ReactDOMClient from 'react-dom/client';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import "estaminet";
-import { Input, NextUIProvider, Spacer } from "@nextui-org/react";
+import { UniquesCollectionMediaElement, UniquesItemMediaElement } from "estaminet";
+import { Dropdown, Input, NextUIProvider, Spacer } from "@nextui-org/react";
 
 const container = document.getElementById('root');
 if (container) {
@@ -10,42 +11,75 @@ if (container) {
   root.render(<App />);
 }
 
-function App() {
-  const [provider, setProvider] = React.useState("statemine");
-  const [collection, setCollection] = React.useState("11");
-  const [item, setItem] = React.useState("1");
+type Snippet = {
+  id: string,
+  name: string,
+  defaults: Record<string, string>
+}
 
-  const html = `<es-uniques-item-media provider="${provider}" collection="${collection}" item="${item}"></es-uniques-item-media>`
+const snippets: Array<Snippet> = [{id: "es-uniques-item-media",
+                   name: "Item Media",
+                   defaults: {provider: "statemine", collection: "11", item: "1"}},
+                  {id: "es-uniques-collection-media",
+                   name: "Collection Media",
+                   defaults: {provider: "statemine", collection: "11"}}];
+
+function Selector({ snippets, onChange }: { snippets: Array<Snippet>, onChange: (snippet: Snippet) => void }): JSX.Element {
+  const [selected, setSelected] = React.useState(snippets[0]);
+  return (
+    <Dropdown>
+      <Dropdown.Button flat>{selected.name}</Dropdown.Button>
+      <Dropdown.Menu
+        aria-label="Static Actions"
+        disallowEmptySelection
+        selectionMode="single"
+        selectedKeys={selected.id}
+        onAction={(e) => {const snippet = snippets.find(s => s.id == e)!; onChange(snippet); setSelected(snippet)}}>
+        {snippets.map(snippet => {
+          return <Dropdown.Item key={snippet.id} >{snippet.name}</Dropdown.Item>;
+        })}
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+}
+
+function snippetAsString(snippet: Snippet): string {
+  const attributes = Object.entries(snippet.defaults).map(values => {
+    values[1] = `"${values[1]}"`;
+    return values.join("=");
+  }).join(" ");
+  return `<${snippet.id} ${attributes}></${snippet.id}>`;
+}
+
+function App() {
+  const [snippet, setSnippet] = React.useState<Snippet>(snippets[0]);
+
+  const __html = snippetAsString(snippet);
   return (
     <NextUIProvider>
       <div style={{display: "flex", height: "100vh", alignItems: "center"}}>
         <div style={{display: "flex", height: "50vh", flex: "1"}}>
-          <div style={{flex: "1"}}>
-            <es-uniques-item-media provider={provider} collection={collection} item={item}></es-uniques-item-media>
-          </div>
+          <div style={{flex: "1"}} dangerouslySetInnerHTML={{__html}} />
           <div style={{display: "flex", flexDirection: "column", flex: "1", alignItems: "center"}}>
+            <Selector snippets={snippets} onChange={setSnippet} />
+            <Spacer x={0.5} />
             <div style={{display: "flex", flex: "1", alignItems: "center"}}>
-                <Input
-                  labelPlaceholder="Provider"
-                  initialValue={provider}
-                  onChange={(e) => setProvider(e.target.value)}
-                />
-                <Spacer x={0.5} />
-                <Input
-                  labelPlaceholder="Collection"
-                  initialValue={collection}
-                  onChange={(e) => setCollection(e.target.value)}
-                />
-                <Spacer x={0.5} />
-                <Input
-                  labelPlaceholder="Item"
-                  initialValue={item}
-                  onChange={(e) => setItem(e.target.value)}
-                />
+              {Object.keys(snippet.defaults).map(key => {
+                return (
+                  <>
+                    <Input
+                      labelPlaceholder={key}
+                      initialValue={snippet.defaults[key]}
+                      onChange={(e) => {snippet.defaults[key] = e.target.value; setSnippet({...snippet})}}
+                    />
+                    <Spacer x={0.5} />
+                  </>
+                );
+              })}
             </div>
             <div style={{display: "flex", flex: "1", alignItems: "center"}}>
               <SyntaxHighlighter language="html">
-              {html}
+              {__html}
               </SyntaxHighlighter>
             </div>
           </div>
@@ -53,4 +87,13 @@ function App() {
       </div>
     </NextUIProvider>
   );
+}
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'es-uniques-collection-media': React.DetailedHTMLProps<React.HTMLAttributes<UniquesCollectionMediaElement>, UniquesCollectionMediaElement>,
+      'es-uniques-item-media': React.DetailedHTMLProps<React.HTMLAttributes<UniquesItemMediaElement>, UniquesItemMediaElement>,
+    }
+}
 }
