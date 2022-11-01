@@ -1,6 +1,6 @@
 {
   "name": "estaminet",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "MIT",
   "description": "A set of WebComponents building on top of Statemint family of Polkadot parachains",
   "keywords": [
