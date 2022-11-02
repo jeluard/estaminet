@@ -28,7 +28,7 @@ function defaultProviders(): Map<string, Provider> {
   return providers;
 }
 
-export const config = self.__ESTAMINET_CONFIG__;
+export let config: Config = self.__ESTAMINET_CONFIG__ = {defaultProviders: new Map()};
 
 export function registerDefaultApi(api: ApiPromise) {
   config.defaultApi = api;
