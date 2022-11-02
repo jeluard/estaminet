@@ -18,16 +18,16 @@
   "dependencies": {
     "@nextui-org/react": "1.0.0-beta.10",
     "esbuild": "0.15.7",
-    "estaminet": "./../dist",
+    "estaminet": "1.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-syntax-highlighter": "15.5.0"
   },
   "devDependencies": {
     "@types/react-dom": "18.0.6",
-    "buffer": "^6.0.3",
+    "buffer": "6.0.3",
     "parcel": "2.7.0",
-    "process": "^0.11.10",
+    "process": "0.11.10",
     "util": "0.12.4"
   }
 }
