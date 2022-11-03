@@ -32,6 +32,14 @@ export let config: Config = self.__ESTAMINET_CONFIG__ = {defaultProviders: new M
 
 export function registerDefaultApi(api: ApiPromise) {
   config.defaultApi = api;
+
+  window.dispatchEvent(
+    new CustomEvent("default-api-changed", {
+      bubbles: true,
+      composed: true,
+      detail: { api }
+    })
+  );
 }
 
 export function registerDefaultProviders(providers: Map<string, Provider>) {
@@ -48,8 +56,12 @@ registerElements();
 
 // Define global types to help with type checking
 interface CustomEventMap {
-  "api-changed": CustomEvent<{ api: ApiPromise | null }>;
+  "api-changed": CustomEvent<{ api: ApiPromise | undefined }>;
   "attribute-changed": CustomEvent<{ name: string, oldValue: any, newValue: any }>;
+}
+
+interface WindowCustomEventMap {
+  "default-api-changed": CustomEvent<{ api: ApiPromise | undefined }>;
 }
 
 // TODO trigger redraw when globals change
@@ -65,5 +77,7 @@ declare global {
   }
   interface Window {
     __ESTAMINET_CONFIG__: Config;
+    addEventListener<K extends keyof WindowCustomEventMap>(type: K,
+      listener: (this: Document, ev: WindowCustomEventMap[K]) => void): void;
   }
 }

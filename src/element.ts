@@ -7,7 +7,7 @@ import { setAttribute } from "./utils/html";
 
 export abstract class BaseProviderElement extends HTMLElement {
     private static readonly providerAttribute = 'provider';
-    protected api: ApiPromise | null = null;
+    protected api?: ApiPromise = config.defaultApi;
 
     constructor() {
       super();
@@ -33,7 +33,7 @@ export abstract class BaseProviderElement extends HTMLElement {
       return [BaseProviderElement.providerAttribute];
     }
 
-    fireApiChangedEvent(api: ApiPromise | null) {
+    fireApiChangedEvent(api?: ApiPromise) {
       this.dispatchEvent(
         new CustomEvent("api-changed", {
           bubbles: true,
@@ -63,19 +63,19 @@ export abstract class BaseProviderElement extends HTMLElement {
 
                         this.fireApiChangedEvent(this.api);
                     }).catch(e => {
-                        this.api = null;
+                        this.api = undefined;
 
                         this.fireApiChangedEvent(this.api);
                         console.error('Failed to create API');
                     });
                 } else {
-                    this.api = null;
+                    this.api = undefined;
 
                     this.fireApiChangedEvent(this.api);
                     console.error('No matching provider');
                 }
               } else {
-                  this.api = null;
+                  this.api = undefined;
 
                   this.fireApiChangedEvent(this.api);
               }

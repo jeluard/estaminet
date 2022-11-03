@@ -1,9 +1,9 @@
 import React from "react";
 import * as ReactDOMClient from 'react-dom/client';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import "estaminet";
-import { UniquesCollectionMediaElement, UniquesItemMediaElement } from "estaminet";
+import { registerDefaultApi, registerElements,  UniquesCollectionMediaElement, UniquesItemMediaElement } from "estaminet";
 import { Dropdown, Input, NextUIProvider, Spacer } from "@nextui-org/react";
+import { ApiPromise, WsProvider } from "@polkadot/api";
 
 const container = document.getElementById('root');
 if (container) {
@@ -17,12 +17,17 @@ type Snippet = {
   defaults: Record<string, string>
 }
 
+const wsProvider = new WsProvider("wss://statemine.api.onfinality.io/public-ws");
+ApiPromise.create({ provider: wsProvider }).then(api => {
+  registerDefaultApi(api);
+});
+
 const snippets: Array<Snippet> = [{id: "es-uniques-item-media",
                    name: "Item Media",
-                   defaults: {provider: "statemine", collection: "11", item: "1"}},
+                   defaults: {collection: "11", item: "1"}},
                   {id: "es-uniques-collection-media",
                    name: "Collection Media",
-                   defaults: {provider: "statemine", collection: "11"}}];
+                   defaults: {collection: "11"}}];
 
 function Selector({ snippets, onChange }: { snippets: Array<Snippet>, onChange: (snippet: Snippet) => void }): JSX.Element {
   const [selected, setSelected] = React.useState(snippets[0]);

@@ -78,20 +78,10 @@ export function defaultResolvers(): Map<string, StorageResolver> {
     return resolvers;
 }
 
-export class BaseMediaElement extends BaseProviderElement {
-    protected api: ApiPromise | null = null;
-    constructor() {
-      super();
-
-      this.addEventListener("api-changed", (evt => {
-        this.api = evt.detail.api;
-      }));
-    }
-}
-
 function syncFromMetadata(shadowRoot: ShadowRoot | null, metadata: ExtendedMetadata) {
     const el = createMediaElement(metadata, new IPFSGatewaySourceResolver());
     if (el && shadowRoot) {
+      clearShadowRoot(shadowRoot);
         // Append the newly created element
         shadowRoot.appendChild(el);
     } else {
@@ -99,10 +89,14 @@ function syncFromMetadata(shadowRoot: ShadowRoot | null, metadata: ExtendedMetad
     }
 }
 
-export class UniquesCollectionMediaElement extends BaseMediaElement {
+export class UniquesCollectionMediaElement extends BaseProviderElement {
     constructor() {
       super();
 
+      window.addEventListener("default-api-changed", (evt) => {
+        this.api = evt.detail.api;
+        this.rerender();
+      });
       this.addEventListener("api-changed", this.rerender);
       this.addEventListener("attribute-changed", this.rerender);
     }
@@ -116,7 +110,6 @@ export class UniquesCollectionMediaElement extends BaseMediaElement {
     }
 
     async rerender() {
-        clearShadowRoot(this);
         if (this.api && this.collection) {
             await this.syncContent(this.api, this.collection);
         }
@@ -145,10 +138,14 @@ export class UniquesCollectionMediaElement extends BaseMediaElement {
 
 }
 
-export class UniquesItemMediaElement extends BaseMediaElement {
+export class UniquesItemMediaElement extends BaseProviderElement {
   constructor() {
     super();
 
+    window.addEventListener("default-api-changed", (evt) => {
+      this.api = evt.detail.api;
+      this.rerender();
+    });
     this.addEventListener("api-changed", this.rerender);
     this.addEventListener("attribute-changed", this.rerender);
   }
@@ -192,7 +189,6 @@ export class UniquesItemMediaElement extends BaseMediaElement {
   }
 
   async rerender() {
-    clearShadowRoot(this);
     if (this.api && this.collection && this.item) {
         await this.syncContent(this.api, this.collection, this.item);
     }

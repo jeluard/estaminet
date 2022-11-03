@@ -15,9 +15,6 @@ export function setAttribute(el: Element, attributeName: string, attributeValue:
     return null;
 }
 
-export function clearShadowRoot(el: HTMLElement) {
-    const shadowRoot = el.shadowRoot;
-    if (shadowRoot) {
-        shadowRoot.innerHTML = '';
-    }
+export function clearShadowRoot(shadowRoot: ShadowRoot) {
+    shadowRoot.innerHTML = '';
 }
