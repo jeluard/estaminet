@@ -1,13 +1,12 @@
 {
-  "name": "estaminet",
+  "name": "@estaminet/website",
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "clean": "rm -rf .parcel-cache dist node_modules yarn.lock",
+    "clean": "rm -rf .parcel-cache dist yarn.lock",
     "dev": "parcel serve ./src/index.html",
-    "build": "mkdir -p dist && cp src/index.html dist && node esbuild.js",
-    "start": "yarn run build --watch && esbuild --servedir=dist"
+    "build": "parcel build ./src/index.html --detailed-report --log-level verbose --public-url ${PUBLIC_URL}"
   },
   "app": "dist/index.html",
   "targets": {
@@ -16,17 +15,19 @@
   "source": "src/index.tsx",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
-    "@nextui-org/react": "1.0.0-beta.10",
-    "esbuild": "0.15.7",
-    "estaminet": "./../dist",
+    "@nextui-org/react": "1.0.0-beta.12",
+    "@polkadot/api": "10.3.2",
+    "estaminet": "../dist",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-syntax-highlighter": "15.5.0"
+    "react-syntax-highlighter": "15.5.0",
+    "wouter": "2.10.0"
   },
   "devDependencies": {
     "@types/react-dom": "18.0.6",
-    "buffer": "6.0.3",
-    "parcel": "2.7.0",
+    "@types/react-syntax-highlighter": "15.5.6",
+    "buffer": "5.5.0",
+    "parcel": "2.8.3",
     "process": "0.11.10",
     "util": "0.12.4"
   }

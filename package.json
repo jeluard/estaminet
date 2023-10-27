@@ -19,22 +19,49 @@
     "type": "git",
     "url": "git+https://github.com/estaminet/estaminet.git"
   },
+  "source": "src/index.ts",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
+  "module": "dist/module.js",
   "files": [
     "dist",
     "src"
   ],
+  "targets": {
+    "module": {
+      "includeNodeModules": true,
+      "optimize": true
+    }
+  },
   "scripts": {
-    "clean": "rm -rf dist node_modules yarn.lock",
-    "build": "tsc"
+    "clean": "rm -rf dist .parcel-cache yarn.lock",
+    "build": "parcel build",
+    "fix:format": "prettier -w ./src",
+    "fix:lint": "eslint ./src --fix",
+    "fix:all": "yarn fix:format && yarn fix:lint",
+    "check:format": "prettier -c ./src",
+    "check:lint": "eslint ./src",
+    "check:tsc": "tsc --noEmit",
+    "check:all": "yarn check:tsc && yarn check:format && yarn check:lint"
   },
   "dependencies": {
-    "@polkadot/api": "9.3.3",
-    "gerbeur": "1.0.4"
+    "@polkadot/api": "10.3.2"
   },
   "devDependencies": {
-    "typescript": "4.8.4"
-  }
+    "@parcel/compressor-brotli": "2.8.3",
+    "@parcel/compressor-gzip": "2.8.3",
+    "@parcel/config-default": "2.8.3",
+    "@parcel/packager-ts": "2.8.3",
+    "@parcel/transformer-inline-string": "2.8.3",
+    "@parcel/transformer-typescript-types": "2.8.3",
+    "@typescript-eslint/eslint-plugin": "5.54.1",
+    "@typescript-eslint/parser": "5.54.1",
+    "buffer": "5.5.0",
+    "eslint": "8.35.0",
+    "eslint-config-prettier": "^8.7.0",
+    "parcel": "2.8.3",
+    "prettier": "2.8.7",
+    "typescript": "5.0.4"
+  },
+  "packageManager": "yarn@1.22.19"
 }

@@ -1,14 +1,20 @@
 import React from "react";
 import * as ReactDOMClient from 'react-dom/client';
+import { registerDefautApi, registerElements,  UniquesCollectionMediaElement, UniquesItemMediaElement } from "estaminet";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { registerDefaultApi, registerElements,  UniquesCollectionMediaElement, UniquesItemMediaElement } from "estaminet";
+import { Route } from "wouter";
 import { Dropdown, Input, NextUIProvider, Spacer } from "@nextui-org/react";
 import { ApiPromise, WsProvider } from "@polkadot/api";
+
+registerElements()
 
 const container = document.getElementById('root');
 if (container) {
   const root = ReactDOMClient.createRoot(container);
-  root.render(<App />);
+  root.render(  <div>
+    <Route path="/"><App /></Route>
+    <Route path="/collection/:id/item/:itemId">{ItemViewer}</Route>
+  </div>);
 }
 
 type Snippet = {
@@ -17,17 +23,12 @@ type Snippet = {
   defaults: Record<string, string>
 }
 
-const wsProvider = new WsProvider("wss://statemine.api.onfinality.io/public-ws");
-ApiPromise.create({ provider: wsProvider }).then(api => {
-  registerDefaultApi(api);
-});
-
 const snippets: Array<Snippet> = [{id: "es-uniques-item-media",
                    name: "Item Media",
-                   defaults: {collection: "11", item: "1"}},
+                   defaults: {provider: "statemine", collection: "11", item: "1"}},
                   {id: "es-uniques-collection-media",
                    name: "Collection Media",
-                   defaults: {collection: "11"}}];
+                   defaults: {provider: "statemine", collection: "11"}}];
 
 function Selector({ snippets, onChange }: { snippets: Array<Snippet>, onChange: (snippet: Snippet) => void }): JSX.Element {
   const [selected, setSelected] = React.useState(snippets[0]);
@@ -56,6 +57,14 @@ function snippetAsString(snippet: Snippet): string {
   return `<${snippet.id} ${attributes}></${snippet.id}>`;
 }
 
+function ItemViewer({ id, itemId }: { id: string, itemId: string }): JSX.Element {
+  return (
+    <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+      <es-uniques-item-media style={{maxWidth: "80%", maxHeight: "80%"}} provider="statemine" collection={id} item={itemId}></es-uniques-item-media>
+    </div>
+  );
+}
+
 function App() {
   const [snippet, setSnippet] = React.useState<Snippet>(snippets[0]);
 
@@ -73,6 +82,7 @@ function App() {
                 return (
                   <>
                     <Input
+                      key={key}
                       labelPlaceholder={key}
                       initialValue={snippet.defaults[key]}
                       onChange={(e) => {snippet.defaults[key] = e.target.value; setSnippet({...snippet})}}
